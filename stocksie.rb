@@ -29,19 +29,19 @@ class OptionsGrant
 =end
   end
   
-	# method to return how many months vested.
-	# to-do:  refactor to map grant_date directly into a hash
+  # method to return how many months vested.
+  # to-do:  refactor to map grant_date directly into a hash
   def months_at_company
-		date_hash = Hash[[:month, :day, :year].zip(grant_date.split('/').map { |x| x.to_i })]
+    date_hash = Hash[[:month, :day, :year].zip(grant_date.split('/').map { |x| x.to_i })]
     date_current = Time.new
     date_start = Time.mktime(date_hash[:year],date_hash[:month],date_hash[:day])
-		months = (date_current.year * 12 + date_current.month) - (date_start.year * 12 + date_start.month)
-		if (date_current.day - date_start.day) < 0
-		  months - 1
-		else
-		  months
-		end  
-	end
+    months = (date_current.year * 12 + date_current.month) - (date_start.year * 12 + date_start.month)
+    if (date_current.day - date_start.day) < 0
+      months - 1
+    else
+      months
+    end  
+  end
 end
 
 
@@ -60,13 +60,13 @@ class OptionsVesting
     self.grant.grant_total / self.grant.vesting_period
   end
 
-	def months_vested
-		if grant.months_at_company < grant.vesting_cliff
-			return 0
-		else
-			grant.months_at_company
-		end
-	end
+  def months_vested
+    if grant.months_at_company < grant.vesting_cliff
+      return 0
+    else
+      grant.months_at_company
+    end
+  end
 
   def remaining
     self.grant.grant_total - (self.monthly * self.grant.months_at_company)

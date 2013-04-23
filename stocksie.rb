@@ -4,10 +4,10 @@ class CompanyVal
   attr_accessor :common_share, :preferred_share, :valuation, :outstanding_share
   
   def initialize (common_share=0, preferred_share=0,valuation=0, outstanding_share=0)
-    @common_share = common_share
-    @preferred_share = preferred_share
-    @valuation = valuation
-		@outstanding_share = outstanding_share
+    @common_share = Float(common_share)
+    @preferred_share = Float(preferred_share)
+    @valuation = Integer(valuation)
+		@outstanding_share = Integer(outstanding_share)
   end
 end
 
@@ -16,10 +16,10 @@ class OptionsGrant
   
   def initialize(grant_date=0, grant_total=0, strike=0, vesting_period=0, vesting_cliff=0)
     @grant_date = grant_date   
-    @grant_total = grant_total
-    @strike = strike
-    @vesting_period = vesting_period
-    @vesting_cliff = vesting_cliff
+    @grant_total = Integer(grant_total)
+    @strike = Float(strike)
+    @vesting_period = Integer(vesting_period)
+    @vesting_cliff = Integer(vesting_cliff)
 =begin
     if vesting_period < vesting_cliff
       raise "ERROR:  Vesting cliff needs to be less than vesting period!"

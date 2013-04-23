@@ -21,33 +21,33 @@ module StocksieConfig
       STDIN.gets.chomp
     end
 
-		# input needed to evaluate company valuation
-		# write logic for input validation, example, strike price must be >= 0
-		# could rewrite each string as a class and could assign a method as a get_input method
-		# duplicates messages keys to input keys setting ea
-		# prints messages and returns user input to hash input
-		# learn reflection to determine data types.  Ideas for input validation.  learn reflection.
-		def user_input_to_hash
-			keys = [:common, :preferred, :valuation, :outstanding, :grant_date, 
-							:grant_amount, :strike, :vesting_term, :vesting_cliff]
+    # input needed to evaluate company valuation
+    # write logic for input validation, example, strike price must be >= 0
+    # could rewrite each string as a class and could assign a method as a get_input method
+    # duplicates messages keys to input keys setting ea
+    # prints messages and returns user input to hash input
+    # learn reflection to determine data types.  Ideas for input validation.  learn reflection.
+    def user_input_to_hash
+      keys = [:common, :preferred, :valuation, :outstanding, :grant_date, 
+              :grant_amount, :strike, :vesting_term, :vesting_cliff]
 
-			values = []
+      values = []
 
-			prompts = ["current strike price:  ", 
-								"preferred price per share:  ", 
-								"company valuation/market cap:  ", 
-								"shares outstanding:  ", 
-								"grant date (MM/DD/YYYY):  ", 
-								"total shares granted:  ", 
-								"strike price:  ", 
-								"vesting term (in months):  ", 
-								"vesting cliff (in months):  "]
+      prompts = ["current strike price:  ", 
+                "preferred price per share:  ", 
+                "company valuation/market cap:  ", 
+                "shares outstanding:  ", 
+                "grant date (MM/DD/YYYY):  ", 
+                "total shares granted:  ", 
+                "strike price:  ", 
+                "vesting term (in months):  ", 
+                "vesting cliff (in months):  "]
 
-			prompts.each { |x| print "#{spacing}#{x}"; values << get_input }
-			Hash[keys.zip(values)]	
-		end
+      prompts.each { |x| print "#{spacing}#{x}"; values << get_input }
+      Hash[keys.zip(values)]  
+    end
 
-		# need to find a better way to initialize objects
+    # need to find a better way to initialize objects
     def initialize_stocksie
       arguments = user_input_to_hash
       company = CompanyVal.new(

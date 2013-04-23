@@ -58,7 +58,7 @@ if File.exist?("./stocksie_data.yaml")
     opts.on('-g')                         { puts config.indent + monies.grant.grant_total.to_s }
     opts.on('-G')                         { puts config.indent + "$" + monies.value_total.to_s }
     
-		# have error message return a string and whaterver optparse returns vs a bunch of puts 
+    # have error message return a string and whaterver optparse returns vs a bunch of puts 
     begin opts.parse!
     rescue OptionParser::InvalidOption => e
       puts e

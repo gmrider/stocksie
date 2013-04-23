@@ -7,7 +7,7 @@ class CompanyVal
     @common_share = Float(common_share)
     @preferred_share = Float(preferred_share)
     @valuation = Integer(valuation)
-		@outstanding_share = Integer(outstanding_share)
+    @outstanding_share = Integer(outstanding_share)
   end
 end
 
@@ -32,7 +32,7 @@ class OptionsGrant
   
   # method to return how many months vested.
   # to-do:  refactor to map grant_date directly into a hash
-	# find in date class, see if there is a method to parse a string
+  # find in date class, see if there is a method to parse a string
   def months_at_company
     date_hash = Hash[[:month, :day, :year].zip(grant_date.split('/').map { |x| x.to_i })]
     date_current = Time.new

@@ -40,10 +40,11 @@ def load_data
   return monies
 end
 
+# need to write a line to return an error message if an option doesn't exist
+# need to refactor options output. current method chaining is ugly.
 if File.exist?("./stocksie_data.yaml")
   monies = load_data
   config = StocksieConfig::Config.new
-  # need to write a line to return an error message if an option doesn't exist
   OptionParser.new do |opts|
     opts.on('-c', '--config')             { config.config }
     opts.on('-h', '--help')               { stocksie_help; exit }
@@ -57,6 +58,7 @@ if File.exist?("./stocksie_data.yaml")
     opts.on('-g')                         { puts config.indent + monies.grant.grant_total.to_s }
     opts.on('-G')                         { puts config.indent + "$" + monies.value_total.to_s }
     
+		# have error message return a string and whaterver optparse returns vs a bunch of puts 
     begin opts.parse!
     rescue OptionParser::InvalidOption => e
       puts e

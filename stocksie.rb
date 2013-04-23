@@ -3,17 +3,18 @@
 class CompanyVal
   attr_accessor :common_share, :preferred_share, :valuation, :outstanding_share
   
-  def initialize (common_share, preferred_share,valuation, outstanding_share)
+  def initialize (common_share=0, preferred_share=0,valuation=0, outstanding_share=0)
     @common_share = common_share
     @preferred_share = preferred_share
     @valuation = valuation
+		@outstanding_share = outstanding_share
   end
 end
 
 class OptionsGrant
   attr_accessor :grant_date, :grant_total, :strike, :vesting_period, :vesting_cliff
   
-  def initialize(grant_date, grant_total, strike, vesting_period, vesting_cliff)
+  def initialize(grant_date=0, grant_total=0, strike=0, vesting_period=0, vesting_cliff=0)
     @grant_date = grant_date   
     @grant_total = grant_total
     @strike = strike
@@ -31,6 +32,7 @@ class OptionsGrant
   
   # method to return how many months vested.
   # to-do:  refactor to map grant_date directly into a hash
+	# find in date class, see if there is a method to parse a string
   def months_at_company
     date_hash = Hash[[:month, :day, :year].zip(grant_date.split('/').map { |x| x.to_i })]
     date_current = Time.new

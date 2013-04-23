@@ -26,7 +26,6 @@ module StocksieConfig
 		# could rewrite each string as a class and could assign a method as a get_input method
 		# duplicates messages keys to input keys setting ea
 		# prints messages and returns user input to hash input
-		# need to write input validation
 		# learn reflection to determine data types.  Ideas for input validation.  learn reflection.
 		def user_input_to_hash
 			keys = [:common, :preferred, :valuation, :outstanding, :grant_date, 
@@ -47,20 +46,21 @@ module StocksieConfig
 			prompts.each { |x| print "#{spacing}#{x}"; values << get_input }
 			Hash[keys.zip(values)]	
 		end
-		
+
+		# need to find a better way to initialize objects
     def initialize_stocksie
       arguments = user_input_to_hash
       company = CompanyVal.new(
-        arguments[:common].to_f,
-        arguments[:preferred].to_f,
-        arguments[:valuation].to_i,
-        arguments[:outstanding].to_i)
+        arguments[:common],
+        arguments[:preferred],
+        arguments[:valuation],
+        arguments[:outstanding])
       grant = OptionsGrant.new(
         arguments[:grant_date],
-        arguments[:grant_amount].to_i,
-        arguments[:strike].to_f,
-        arguments[:vesting_term].to_i,
-        arguments[:vesting_cliff].to_i)
+        arguments[:grant_amount],
+        arguments[:strike],
+        arguments[:vesting_term],
+        arguments[:vesting_cliff])
       options_vesting = OptionsVesting.new(company,grant)
       options_vesting
     end

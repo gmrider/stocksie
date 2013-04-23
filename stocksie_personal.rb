@@ -41,7 +41,7 @@ def load_data
 end
 
 # need to write a line to return an error message if an option doesn't exist
-# need to refactor options output. current method chaining is ugly.
+# need to refactor options output. current string chaining is ugly.
 if File.exist?("./stocksie_data.yaml")
   monies = load_data
   config = StocksieConfig::Config.new

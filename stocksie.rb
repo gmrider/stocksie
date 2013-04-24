@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'date'
+
 class CompanyVal
   attr_accessor :common_share, :preferred_share, :valuation, :outstanding_share
   
@@ -30,23 +32,14 @@ class OptionsGrant
 =end
   end
   
-  # method to return how many months vested.
-  # to-do:  refactor to map grant_date directly into a hash
-  # find in date class, see if there is a method to parse a string
-  def months_at_company
-    date_hash = Hash[[:month, :day, :year].zip(grant_date.split('/').map { |x| x.to_i })]
-    date_current = Time.new
-    date_start = Time.mktime(date_hash[:year],date_hash[:month],date_hash[:day])
-    months = (date_current.year * 12 + date_current.month) - (date_start.year * 12 + date_start.month)
-    if (date_current.day - date_start.day) < 0
-      months - 1
-    else
-      months
-    end  
-  end
+	def months_at_company
+		date_current = Time.new
+		date_start = Date.strptime(grant_date, "%m/%d/%Y")
+		months = (date_current.year * 12 - date_current.month) - (date_start.year * 12 - date_start.month)
+		return months - 1 if date_current.day - date_start.day < 0
+		return months
+	end
 end
-
-
 #write logic that checks to make sure that the months that have passed are greater than the vesting cliff
 
 class OptionsVesting

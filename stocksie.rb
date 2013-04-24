@@ -31,16 +31,16 @@ class OptionsGrant
     end
 =end
   end
-  
-	def months_at_company
-		date_current = Time.new
-		date_start = Date.strptime(grant_date, "%m/%d/%Y")
-		months = (date_current.year * 12 - date_current.month) - (date_start.year * 12 - date_start.month)
-		return months - 1 if date_current.day - date_start.day < 0
-		return months
-	end
+
+  #write logic that checks to make sure that the months that have passed are greater than the vesting cliff
+  def months_at_company
+    date_current = Time.new
+    date_start = Date.strptime(grant_date, "%m/%d/%Y")
+    months = (date_current.year * 12 - date_current.month) - (date_start.year * 12 - date_start.month)
+    return months - 1 if date_current.day - date_start.day < 0
+    return months
+  end
 end
-#write logic that checks to make sure that the months that have passed are greater than the vesting cliff
 
 class OptionsVesting
   attr_accessor :company, :grant

@@ -1,74 +1,53 @@
 #!/usr/bin/env ruby 
 
-# need to work on the precision for rounding.  Using mixed floats and integers for approximations
 require 'stocksie'
 require 'stocksie_personal_config'
 require 'optparse'
 require 'yaml'
 
-
-def stocksie_help
-  puts
-  puts "  Options:"
-  puts "    [-c] [--config] configure evaluation data for script"
-  puts "    [-m] shares vesting per month"
-  puts "    [-M] dollar amount vesting per month"
-  puts "    [-t] months vested"
-  puts "    [-v] total shares vested"
-  puts "    [-V] total dollar amount vested"
-  puts "    [-r] unvested shares"
-  puts "    [-R] unvested dollar amount"
-  puts "    [-g] total options granted"
-  puts "    [-G] total value of options granted"
-  puts
+def load_or_config(config)
+	if File.exist?("./stocksie_data.yaml")
+	  YAML.load(File.open("./stocksie_data.yaml","r"))
+	else
+	  config.config
+	end	
 end
 
-def error_message
-  puts 
-  puts "ERROR:  Illegal option, for help use [help | -h | --help]"
-  puts "usage:  [-c | --config | -m | -M | -t | -v | -V | -r | -R | -g | -G]"
-  puts
-  exit
+# need to refactor options output. current string chaining is ugly.	
+# learn to iterate through a hash of nested arrays
+def optparse(monies,config)	
+	OptionParser.new(banner = nil, width = 15, indent =' ' * 4)	do |opts|  
+		opts.banner = "Usage:  #{$0} [-option]"
+		opts.on('-c', '--config', 'configure evaluation data for script')  	{ config.config }
+    opts.on('-m', 'shares vesting per month')                         	{ puts config.indent + monies.monthly.to_s }
+    opts.on('-M', 'dollar amount vesting per month')                    { puts config.indent + "$" + monies.value_monthly.to_s }  
+    opts.on('-t', 'months vested')                         							{ puts config.indent + monies.grant.months_at_company.to_s }
+    opts.on('-v','total shares vested')                         				{ puts config.indent + monies.vest_total.to_s }
+    opts.on('-V', 'total dollar amount vested')                         { puts config.indent + "$" + monies.value_vested.to_s }
+    opts.on('-r', 'unvested shares')                         						{ puts config.indent + monies.remaining.to_s }
+    opts.on('-R', 'unvested dollar amount')                         		{ puts config.indent + "$" + monies.value_remain.to_s }
+    opts.on('-g', 'total options granted')                         			{ puts config.indent + monies.grant.grant_total.to_s }
+    opts.on('-G', 'total value of options granted')                     { puts config.indent + "$" + monies.value_total.to_s }
+		opts.help
+		opts.on_head('Options:')
+	end
 end
 
-if ARGV.empty?
-  error_message
-end
-
-def load_data
-  monies = YAML.load(File.open("./stocksie_data.yaml","r"))
-  return monies
-end
-
-# need to write a line to return an error message if an option doesn't exist
-# need to refactor options output. current string chaining is ugly.
-if File.exist?("./stocksie_data.yaml")
-  monies = load_data
-  config = StocksieConfig::Config.new
-  OptionParser.new do |opts|
-    opts.on('-c', '--config')             { config.config }
-    opts.on('-h', '--help')               { stocksie_help; exit }
-    opts.on('-m')                         { puts config.indent + monies.monthly.to_s }
-    opts.on('-M')                         { puts config.indent + "$" + monies.value_monthly.to_s }  
-    opts.on('-t')                         { puts config.indent + monies.grant.months_at_company.to_s }
-    opts.on('-v')                         { puts config.indent + monies.vest_total.to_s }
-    opts.on('-V')                         { puts config.indent + "$" + monies.value_vested.to_s }
-    opts.on('-r')                         { puts config.indent + monies.remaining.to_s }
-    opts.on('-R')                         { puts config.indent + "$" + monies.value_remain.to_s }
-    opts.on('-g')                         { puts config.indent + monies.grant.grant_total.to_s }
-    opts.on('-G')                         { puts config.indent + "$" + monies.value_total.to_s }
-    
-    # have error message return a string and whaterver optparse returns vs a bunch of puts 
-    begin opts.parse!
+def parse_option(optparse)
+	if ARGV.empty?
+		puts optparse.banner
+	elsif ARGV[0] == "-" || ARGV[0].match(/^[a-zA-Z]/)
+		puts optparse
+	else
+		begin optparse.parse!
     rescue OptionParser::InvalidOption => e
       puts e
-      puts error_message
+			puts optparse
       exit 1
     end
-  end
-  # if data file doesn't exist for serialization, you can still run config against the script
-else
-  config.config
+	end
 end
 
 
+config = StocksieConfig::Config.new
+parse_option(optparse(load_or_config(config),config))

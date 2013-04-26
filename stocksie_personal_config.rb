@@ -21,6 +21,11 @@ module StocksieConfig
       STDIN.gets.chomp
     end
 
+		def validate(arg)
+		# this method should take get_input and validate it against any errors raised
+		# it should resue get_iput from an argument error and return a statement to prompt user for correct input
+		end
+		
     # input needed to evaluate company valuation
     # write logic for input validation, example, strike price must be >= 0
     # could rewrite each string as a class and could assign a method as a get_input method

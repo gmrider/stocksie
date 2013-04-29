@@ -87,11 +87,11 @@ module StocksieConfig
     def save_data_message
       if File.exist?("./stocksie_data.yaml")
         puts "#{indent}SUCCESS    Data configured"
-        puts "      File: stocksie_data.yanl created in current directory"
+        puts "      File: stocksie_data.yaml created in current directory"
         puts
       else
         puts "#{indent}ERROR    Config failed"
-        puts "      File: stocksie_data.yanl not created"
+        puts "      File: stocksie_data.yaml not created"
         puts
       end
     end

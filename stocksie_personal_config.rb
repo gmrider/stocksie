@@ -17,21 +17,29 @@ module StocksieConfig
       system("clear")
     end
 
-    def get_input
-      STDIN.gets.chomp
+    # got input validation to work, validates input less than 0 and a data format
+    # re-write at some point to make cleaner.  Possibly break into a class or other methods.
+    def get_input_and_validate(prompt)
+      begin
+      x = STDIN.gets.chomp
+        unless prompt.include? "MM/DD/YYYY"
+          x = Float(x)
+          raise ArgumentError, "#{indent}Input can't be less than 0 :)" if x < 0
+        else 
+          raise ArgumentError, "#{indent}Input should be date format MM/DD/YYYY :)" if x.match(/\d?\d\/\d{2}\/\d{4}/) == nil    
+          x = x
+        end
+      rescue ArgumentError => e
+          puts e.message
+          print "#{spacing}Please try again:  "
+          retry
+      end
+      return x
     end
-
-		def validate(arg)
-		# this method should take get_input and validate it against any errors raised
-		# it should resue get_iput from an argument error and return a statement to prompt user for correct input
-		end
-		
+    
     # input needed to evaluate company valuation
-    # write logic for input validation, example, strike price must be >= 0
     # could rewrite each string as a class and could assign a method as a get_input method
     # duplicates messages keys to input keys setting ea
-    # prints messages and returns user input to hash input
-    # learn reflection to determine data types.  Ideas for input validation.  learn reflection.
     def user_input_to_hash
       keys = [:common, :preferred, :valuation, :outstanding, :grant_date, 
               :grant_amount, :strike, :vesting_term, :vesting_cliff]
@@ -48,7 +56,7 @@ module StocksieConfig
                 "vesting term (in months):  ", 
                 "vesting cliff (in months):  "]
 
-      prompts.each { |x| print "#{spacing}#{x}"; values << get_input }
+      prompts.each { |x| print "#{spacing}#{x}"; values << get_input_and_validate(x) }
       Hash[keys.zip(values)]  
     end
 

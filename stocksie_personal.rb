@@ -19,15 +19,15 @@ def optparse(monies,config)
   OptionParser.new(banner = nil, width = 15, indent =' ' * 4) do |opts|  
     opts.banner = "Usage:  #{$0} [-option]"
     opts.on('-c', '--config', 'configure evaluation data for script')   { config.config }
-    opts.on('-m', 'shares vesting per month')                           { puts config.indent + monies.monthly.to_s }
-    opts.on('-M', 'dollar amount vesting per month')                    { puts config.indent + "$" + monies.value_monthly.to_s }  
-    opts.on('-t', 'months vested')                                      { puts config.indent + monies.grant.months_at_company.to_s }
-    opts.on('-v','total shares vested')                                 { puts config.indent + monies.vest_total.to_s }
-    opts.on('-V', 'total dollar amount vested')                         { puts config.indent + "$" + monies.value_vested.to_s }
-    opts.on('-r', 'unvested shares')                                    { puts config.indent + monies.remaining.to_s }
-    opts.on('-R', 'unvested dollar amount')                             { puts config.indent + "$" + monies.value_remain.to_s }
-    opts.on('-g', 'total options granted')                              { puts config.indent + monies.grant.grant_total.to_s }
-    opts.on('-G', 'total value of options granted')                     { puts config.indent + "$" + monies.value_total.to_s }
+    opts.on('-m', 'shares vesting per month')                           { puts "#{config.indent}#{monies.monthly}" }
+    opts.on('-M', 'dollar amount vesting per month')                    { puts "#{config.indent}$#{monies.value_monthly}" }  
+    opts.on('-t', 'months vested')                                      { puts "#{config.indent}#{monies.grant.months_at_company}" }
+    opts.on('-v','total shares vested')                                 { puts "#{config.indent}#{monies.vest_total}" }
+    opts.on('-V', 'total dollar amount vested')                         { puts "#{config.indent}$#{monies.value_vested}" }
+    opts.on('-r', 'unvested shares')                                    { puts "#{config.indent}#{monies.remaining}" }
+    opts.on('-R', 'unvested dollar amount')                             { puts "#{config.indent}$#{monies.value_remain}" }
+    opts.on('-g', 'total options granted')                              { puts "#{config.indent}#{monies.grant.grant_total}" }
+    opts.on('-G', 'total value of options granted')                     { puts "#{config.indent}$#{monies.value_total}" }
     opts.help
     opts.on_head('Options:')
   end

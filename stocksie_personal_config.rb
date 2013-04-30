@@ -41,8 +41,8 @@ module StocksieConfig
     # could rewrite each string as a class and could assign a method as a get_input method
     # duplicates messages keys to input keys setting ea
     def user_input_to_hash
-      keys = [:common, :preferred, :valuation, :outstanding, :grant_date, 
-              :grant_amount, :strike, :vesting_term, :vesting_cliff]
+      keys = [:common_share, :preferred_share, :valuation, :outstanding_share, :grant_date, 
+              :grant_total, :strike, :vesting_period, :vesting_cliff]
 
       values = []
 
@@ -60,40 +60,22 @@ module StocksieConfig
       Hash[keys.zip(values)]  
     end
 
-    # need to find a better way to initialize objects
+    # rewrote Stocksie classes to accept hashes as input, need to break into two hashes and instantiate.
+		# gonna force it because of respond_to? conditional in class initialize methods.
     def initialize_stocksie
       arguments = user_input_to_hash
-      company = CompanyVal.new(
-        arguments[:common],
-        arguments[:preferred],
-        arguments[:valuation],
-        arguments[:outstanding])
-      grant = OptionsGrant.new(
-        arguments[:grant_date],
-        arguments[:grant_amount],
-        arguments[:strike],
-        arguments[:vesting_term],
-        arguments[:vesting_cliff])
-      options_vesting = OptionsVesting.new(company,grant)
-      options_vesting
+      OptionsVesting.new(CompanyVal.new(arguments),OptionsGrant.new(arguments))
     end
 
     def save_data(object)
-      File.open("stocksie_data.yaml", "w+") do |file|
-        file.puts YAML.dump(object)
-      end
+      File.open("stocksie_data.yaml", "w+") { |file| file.puts YAML.dump(object) }
     end
 
     def save_data_message
-      if File.exist?("./stocksie_data.yaml")
-        puts "#{indent}SUCCESS    Data configured"
-        puts "      File: stocksie_data.yaml created in current directory"
-        puts
-      else
-        puts "#{indent}ERROR    Config failed"
-        puts "      File: stocksie_data.yaml not created"
-        puts
-      end
+      success = ["\n", "#{indent}SUCCESS    Data configured", "      File: stocksie_data.yaml created in current directory", "\n"]
+			failure = ["\n", "#{indent}ERROR    Config failed", "      File: stocksie_data.yaml not created", "\n"]
+			return success.each { |line| puts line } if File.exist?("./stocksie_data.yaml")
+			return failure.each { |line| puts line }
     end
 
     def config

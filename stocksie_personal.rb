@@ -17,7 +17,7 @@ end
 # learn to iterate through a hash of nested arrays
 def optparse(monies,config) 
   OptionParser.new(banner = nil, width = 15, indent =' ' * 4) do |opts|  
-    opts.banner = "Usage:  #{$0} [-option]"
+    opts.banner = "Usage:  #{$0} [-options]"
     opts.on('-c', '--config', 'configure evaluation data for script')   { config.config }
     opts.on('-m', 'shares vesting per month')                           { puts "#{config.indent}#{monies.monthly}" }
     opts.on('-M', 'dollar amount vesting per month')                    { puts "#{config.indent}$#{monies.value_monthly}" }  

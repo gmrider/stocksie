@@ -61,7 +61,7 @@ module StocksieConfig
     end
 
     # rewrote Stocksie classes to accept hashes as input, need to break into two hashes and instantiate.
-		# gonna force it because of respond_to? conditional in class initialize methods.
+    # gonna force it because of respond_to? conditional in class initialize methods.
     def initialize_stocksie
       arguments = user_input_to_hash
       OptionsVesting.new(CompanyVal.new(arguments),OptionsGrant.new(arguments))
@@ -73,9 +73,9 @@ module StocksieConfig
 
     def save_data_message
       success = ["\n", "#{indent}SUCCESS    Data configured", "      File: stocksie_data.yaml created in current directory", "\n"]
-			failure = ["\n", "#{indent}ERROR    Config failed", "      File: stocksie_data.yaml not created", "\n"]
-			return success.each { |line| puts line } if File.exist?("./stocksie_data.yaml")
-			return failure.each { |line| puts line }
+      failure = ["\n", "#{indent}ERROR    Config failed", "      File: stocksie_data.yaml not created", "\n"]
+      return success.each { |line| puts line } if File.exist?("./stocksie_data.yaml")
+      return failure.each { |line| puts line }
     end
 
     def config

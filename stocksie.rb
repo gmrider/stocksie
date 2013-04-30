@@ -3,25 +3,60 @@
 require 'date'
 
 class CompanyVal
-  attr_accessor :common_share, :preferred_share, :valuation, :outstanding_share
+  attr_reader :common_share, :preferred_share, :valuation, :outstanding_share
   
-  def initialize (common_share=0, preferred_share=0,valuation=0, outstanding_share=0)
-    @common_share = Float(common_share)
-    @preferred_share = Float(preferred_share)
-    @valuation = Integer(valuation)
-    @outstanding_share = Integer(outstanding_share)
+  def initialize(options)
+    options.each do |opt,val|
+      send("#{opt}=", val) if respond_to? "#{opt}="
+    end
+  end
+  
+  def common_share=(x)
+    @common_share= Float(x)
+  end
+  
+  def preferred_share=(x)
+    @preferred_share= Float(x)
+  end
+  
+  def valuation=(x)
+    @valuation= Integer(x)
+  end
+  
+  def outstanding_share=(x)
+    @outstanding_share= Integer(x)
   end
 end
 
 class OptionsGrant
-  attr_accessor :grant_date, :grant_total, :strike, :vesting_period, :vesting_cliff
+  attr_reader :grant_date, :grant_total, :strike, :vesting_period, :vesting_cliff
   
-  def initialize(grant_date=0, grant_total=0, strike=0, vesting_period=0, vesting_cliff=0)
-    @grant_date = grant_date   
-    @grant_total = Integer(grant_total)
-    @strike = Float(strike)
-    @vesting_period = Integer(vesting_period)
-    @vesting_cliff = Integer(vesting_cliff)
+  def initialize(options = {})
+    options.each do |opt,val|
+      send("#{opt}=", val) if respond_to? "#{opt}="
+    end
+  end
+  
+  def grant_date=(x)
+    @grant_date= String(x)
+  end
+  
+  def grant_total=(x)
+    @grant_total= Integer(x)
+  end
+  
+  def strike=(x)
+    @strike = Float(x)
+  end
+  
+  def vesting_period=(x)
+    @vesting_period= Integer(x)
+  end
+  
+  def vesting_cliff=(x)
+    @vesting_cliff= Integer(x)
+  end
+  
 =begin
     if vesting_period < vesting_cliff
       raise "ERROR:  Vesting cliff needs to be less than vesting period!"
@@ -30,8 +65,6 @@ class OptionsGrant
       raise "ERROR:  Strike needs to be 0 or greater!"
     end
 =end
-  end
-
   #write logic that checks to make sure that the months that have passed are greater than the vesting cliff
   def months_at_company
     date_current = Time.new

@@ -5,7 +5,7 @@ require 'date'
 class CompanyVal
   attr_reader :common_share, :preferred_share, :valuation, :outstanding_share
   
-  def initialize(options)
+  def initialize(options = {})
     options.each do |opt,val|
       send("#{opt}=", val) if respond_to? "#{opt}="
     end

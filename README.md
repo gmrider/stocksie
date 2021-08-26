@@ -1,4 +1,4 @@
 stocksie
 ========
 
-Ruby CLI to calculate the value of an individuals stock options grant.
+Ruby CLI to calculate the value of an individual's stock options grant.
